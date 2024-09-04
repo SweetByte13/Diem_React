@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { AdjustmentsHorizontalIcon, CalendarDateRangeIcon, CloudArrowUpIcon, LockClosedIcon, PencilSquareIcon, ServerIcon } from '@heroicons/react/20/solid'
-import NavBar from "../components/NavBar";
+import React, { useEffect, useContext  } from "react";
+import { AppContext } from "../context/Context";
+import { AdjustmentsHorizontalIcon, CalendarDateRangeIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
 import Header from "../components/Header";
-import NavBarLogIn from "../components/NavBarLogIn";
+
 
 function Home() {
+    const useAppContext = () => useContext(AppContext);
+    const { user, setUser } = useAppContext();
+
     return (
         <div>
-            <NavBarLogIn />
             <Header />
             <body>
                 <div className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
