@@ -9,7 +9,7 @@ function Footer() {
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mx-auto">
                     <a  class="flex justify-center">
-                            <img src="./favicon.ico" class="flex justify-center rounded-full"/>
+                            <img src="./favicon.ico" class="size-36 flex justify-center rounded-full"/>
                     </a>
                     <ul class="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-16 mb-10 border-b border-gray-200">
                         <li><a  class="text-gray-800 hover:text-gray-900">Home</a></li>

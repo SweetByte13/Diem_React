@@ -31,7 +31,7 @@ export default function NavBarLogIn() {
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                         <button
                             type="button"
-                            className="relative rounded-md bg-purple-950 p-2 pt-1 pb-1 text-white mr-4 hover:bg-purple-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            className="relative rounded-md bg-[#301934] p-2 pt-1 pb-1 text-white mr-4 hover:bg-{#5F4563} hover:bg-[#5F4563] hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                         >
                             <span className="absolute -inset-1.5" />
                             <button aria-hidden="true" className="h-2 w-14">
@@ -41,7 +41,7 @@ export default function NavBarLogIn() {
                         <br></br>
                         <button
                             type="button"
-                            className="relative rounded-md bg-purple-950 p-2 pt-1 pb-1 text-white mr-4 hover:bg-purple-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            className="relative rounded-md bg-[#301934] p-2 pt-1 pb-1 text-white mr-4 hover:bg-[#5F4563] hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                         >
                             <span className="absolute -inset-1.5" />
                             <button aria-hidden="true" className="h-2 w-14">

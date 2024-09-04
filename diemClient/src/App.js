@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import NavBarLogIn from "./components/NavBarLogIn";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
+import Signup from "./pages/Signup";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,6 +16,7 @@ function App() {
       {user === null || user === undefined ? <NavBarLogIn /> : <NavBar />}
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/signup' element={<Signup />} />
         </Routes>
         <Footer />
       </AppContext.Provider>
