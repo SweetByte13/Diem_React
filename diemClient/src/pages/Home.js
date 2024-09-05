@@ -39,8 +39,8 @@ function Home() {
                             <rect fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)" width="100%" height="100%" strokeWidth={0} />
                         </svg>
                     </div>
-                    <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-                        <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+                    <div className="">
+                        <div className="pl-96 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl">
                             <div className="lg:pr-4">
                                 <div className="lg:max-w-lg">
                                     <p className="text-base font-semibold leading-7 text-indigo-600">About Diem...</p>
@@ -54,10 +54,10 @@ function Home() {
                         <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
                             
                         </div>
-                        <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+                        <div className="pl-96 lg:mx-auto lg:w-full lg:max-w-7xl">
                             <div className="lg:pr-4">
-                                <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
-                                    <p>
+                                <div className="max-w-xl text-base  leading-7 text-gray-700 lg:max-w-lg">
+                                    <p className="text-justify">
                                     Diem is a comprehensive habit tracking application designed to help you build and maintain positive habits. 
                                     It offers a variety of views, including monthly, weekly, and daily, allowing you to easily track your progress over time. 
                                     As you complete each habit, you can check it off, providing a sense of accomplishment.
@@ -83,13 +83,13 @@ function Home() {
                                             </span>
                                         </li>
                                     </ul>
-                                    <p className="mt-8">
+                                    <p className="text-justify mt-8">
                                     Diem also provides detailed statistics on your habits, showing you how far you’ve come and how close you are to achieving your goals. 
                                     The app sends notifications to remind you to complete your habits, encouraging consistency and habit change. 
                                     With Diem, you can track all your habits in one place and are encouraged to add new habits to continuously improve your lifestyle.
                                     </p>
-                                    <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">No motivation? No problem.</h2>
-                                    <p className="mt-6">
+                                    <h2 className="text-justify mt-16 text-2xl font-bold tracking-tight text-gray-900">No motivation? No problem.</h2>
+                                    <p className="text-justify mt-6">
                                     Diem is designed to tackle the challenge of lack of motivation by providing timely notifications of encouragement. 
                                     These reminders help keep you on track and motivated to complete your habits. By consistently checking off habits and seeing your progress, 
                                     Diem teaches you how to build consistency and discipline. 
