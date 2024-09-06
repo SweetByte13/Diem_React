@@ -26,10 +26,15 @@ function Login() {
         //     },
         //     body: JSON.stringify(user),
         // })
-        // .then((resp) => resp.json())
-        // .then((user) => setUser)
+        // .then((resp) => if(ressp.ok){
+        // resp.json())} else{
+            // alert('Invalid credentials')
+        // }
+        // .then((user) => {
+            // setUser;
+            navigate("/calender")
+            // })
     }
-//test
     return (
         <div className="min-w-screen min-h-screen bg-[#251627] flex items-center justify-center px-5 py-5" >
             <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-1/2 overflow-hidden" style={{ maxWidth: '1000px' }}>
@@ -50,7 +55,7 @@ function Login() {
                                             <div className="-w-16 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
                                                 <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
                                             </div>
-                                            <input type="username" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="JohnSmith123" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                                            <input type="username" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="JohnSmith123" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +66,7 @@ function Login() {
                                             <div className="z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
                                                 <i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
                                             </div>
-                                            <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                            <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                                         </div>
                                     </div>
                                 </div>
