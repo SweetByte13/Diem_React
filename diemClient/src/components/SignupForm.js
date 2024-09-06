@@ -1,4 +1,50 @@
+import React, { useContext, useState } from "react";
+import { AppContext } from "../context/Context";
+import { useNavigate } from "react-router-dom";
+import * as yup from 'yup'
+
 function SignupForm() {
+    const navigate = useNavigate();
+    const useAppContext = () => useContext(AppContext);
+    const { user, setUser } = useAppContext();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail]= useState("");
+
+    const validationSchema = yup.object().shape({
+        username: yup.string().min(5, "Username must be five characters or longer.").max(30, "Username can not be more than thirty characters."),
+        email: yup.string().email("Invalid email address").min(8, "Must be a valid email address"),
+        password: yup.string().min(6, "Password must be six characters or more.").max(20, "Passsword can not be longer than twenty characters."),
+        confirmPassword: yup.string().oneOf([yup.ref('password')], "Password does not match"),
+    })
+
+    const initialValues = {
+        username: '',
+        password: '',
+        confirmPassword: '',
+        email: '',
+    }
+
+    // function handleSignupFormSubmit(values, { setSubmitting }) {
+    //     fetch("/api/signup", {
+    //         method: 'POST',
+    //         headers: {
+    //             "content-Type": 'application/json'
+    //         },
+    //         body: JSON.stringify(values)
+    //     }).then((resp) => {
+    //         if (resp.ok) {
+    //             return resp.json()
+    //         } else {
+    //             alert('Invalid credentials')
+    //         }
+    //     }).then((user) => {
+    //         setUser(user);
+    //         navigate("/");
+    //     })
+    //     setSubmitting(false);
+    // }
+
     return (
 
         <div className="min-w-screen min-h-screen bg-[#251627] flex items-center justify-center px-5 py-5" >
@@ -11,71 +57,73 @@ function SignupForm() {
                             <h1 className="font-bold text-3xl text-gray-900">WELCOME TO DIEM</h1>
                             <p>Enter your information to register</p>
                         </div>
-                        <div>
-                            <div className="flex -mx-3">
-                                <div className="ml-56 w-1/2  px-3 mb-5">
-                                    <label htmlFor="" className="text-xs font-semibold px-1">Username</label>
-                                    <div className="flex">
-                                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                                            <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
+                        <form >
+                            <div>
+                                <div className="flex -mx-3">
+                                    <div className="ml-56 w-1/2  px-3 mb-5">
+                                        <label htmlFor="" className="text-xs font-semibold px-1">Username</label>
+                                        <div className="flex">
+                                            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                                                <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
+                                            </div>
+                                            <input type="email" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="JohnSmith123" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
                                         </div>
-                                        <input type="email" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="JohnSmith123" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex -mx-3">
-                                <div className="ml-56 w-1/2  px-3 mb-5">
-                                    <label htmlFor="" className="text-xs font-semibold px-1">Email</label>
-                                    <div className="flex">
-                                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                                            <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
+                                <div className="flex -mx-3">
+                                    <div className="ml-56 w-1/2  px-3 mb-5">
+                                        <label htmlFor="" className="text-xs font-semibold px-1">Email</label>
+                                        <div className="flex">
+                                            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                                                <i className="mdi mdi-email-outline text-gray-400 text-lg"></i>
+                                            </div>
+                                            <input type="email" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="johnsmith@example.com" name="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
                                         </div>
-                                        <input type="email" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="johnsmith@example.com" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex -mx-3">
-                                <div className="ml-56 w-1/2  px-3 mb-5">
-                                    <label htmlFor="" className="text-xs font-semibold px-1">Password</label>
-                                    <div className="flex">
-                                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                                            <i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+                                <div className="flex -mx-3">
+                                    <div className="ml-56 w-1/2  px-3 mb-5">
+                                        <label htmlFor="" className="text-xs font-semibold px-1">Password</label>
+                                        <div className="flex">
+                                            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                                                <i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+                                            </div>
+                                            <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                                         </div>
-                                        <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex -mx-3">
-                                <div className="ml-56 w-1/2  px-3 mb-5">
-                                    <label htmlFor="" className="text-xs font-semibold px-1">Confirm Password</label>
-                                    <div className="flex">
-                                        <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
-                                            <i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+                                <div className="flex -mx-3">
+                                    <div className="ml-56 w-1/2  px-3 mb-5">
+                                        <label htmlFor="" className="text-xs font-semibold px-1">Confirm Password</label>
+                                        <div className="flex">
+                                            <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                                                <i className="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+                                            </div>
+                                            <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" />
                                         </div>
-                                        <input type="password" className="w-full -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex -mx-3">
-                                <div className="w-full px-3 mb-5">
-                                    <button className="block w-full max-w-xs mx-auto bg-[#301934] hover:bg-[#5F4563] focus:bg-[#8E718F] text-white rounded-lg px-3 py-3 font-semibold" >REGISTER NOW</button>
+                                <div className="flex -mx-3">
+                                    <div className="w-full px-3 mb-5">
+                                        <button className="block w-full max-w-xs mx-auto bg-[#301934] hover:bg-[#5F4563] focus:bg-[#8E718F] text-white rounded-lg px-3 py-3 font-semibold" >REGISTER NOW</button>
+                                    </div>
+                                </div>
+                                <div className="ml-80 w-1/2 px-3 mb-5">
+                                    <span>
+                                        Already have an account?
+                                        <a
+                                            href="/login"
+                                            class="text-xs ml-2 text-blue-500 font-semibold"
+                                        >Log In Now
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
-                            <div className="ml-80 w-1/2 px-3 mb-5">
-                                <span>
-                                    Already have an account?
-                                    <a
-                                        href="/login"
-                                        class="text-xs ml-2 text-blue-500 font-semibold"
-                                    >Log In Now
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
