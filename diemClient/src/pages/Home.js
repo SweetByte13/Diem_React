@@ -3,7 +3,6 @@ import { AppContext } from "../context/Context";
 import { AdjustmentsHorizontalIcon, CalendarDateRangeIcon, PencilSquareIcon } from '@heroicons/react/20/solid'
 import Header from "../components/Header";
 
-
 function Home() {
     const useAppContext = () => useContext(AppContext);
     const { user, setUser } = useAppContext();
