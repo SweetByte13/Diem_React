@@ -12,7 +12,7 @@ export default function NavBarLogIn() {
         navigate("/signup")
     }
     function handleLogInClick(e){
-        navigate("/signup")
+        navigate("/login")
     }
 
     return (

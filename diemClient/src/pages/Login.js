@@ -19,22 +19,28 @@ function Login() {
             "password": password
         }
 
-        // fetch("",{
-        //     method:POST,
+        // fetch("YOUR_API_ENDPOINT", {
+        //     method: "POST",
         //     headers: {
-        //         "Content-Type": "Application/JSON",
+        //         "Content-Type": "application/json",
         //     },
         //     body: JSON.stringify(user),
         // })
-        // .then((resp) => if(ressp.ok){
-        // resp.json())} else{
-            // alert('Invalid credentials')
-        // }
+        // .then((resp) => {
+        //     if (resp.ok) {
+        //         return resp.json();
+        //     } else {
+        //         alert('Invalid credentials');
+        //         throw new Error('Invalid credentials');
+        //     }
+        // })
         // .then((user) => {
-            // setUser;
-            navigate("/calender")
-            // })
+        //     setUser(user);
+            navigate("/calendar");
+        // })
+        // .catch((error) => console.error('Error:', error));
     }
+    
     return (
         <div className="min-w-screen min-h-screen bg-[#251627] flex items-center justify-center px-5 py-5" >
             <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-1/2 overflow-hidden" style={{ maxWidth: '1000px' }}>
