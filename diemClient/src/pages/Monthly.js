@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/Context";
-
+import Calender from "../components/Calender";
 
 function Weekly(){
     const useAppContext = () => useContext(AppContext);
@@ -8,6 +8,7 @@ function Weekly(){
 
     return(
         <>
+        <Calender />
         </>
     )
 }

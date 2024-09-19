@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AppContext } from "../context/Context";
 
+//Redo calender. This one is hardcoded tailwindcss. Look for a JS calender or google calender.
+
 function Calender() {
     const [formattedDate, setFormattedDate] = useState("");
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
