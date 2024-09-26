@@ -173,14 +173,6 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-07">7</time>
-                            {/* <ol class="mt-2">
-                                <li>
-                                    <a href="#" class="group flex">
-                                        <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Date night</p>
-                                        <time datetime="2022-01-08T18:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">6PM</time>
-                                    </a>
-                                </li>
-                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-08">8</time>
@@ -196,14 +188,6 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-12" class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">12</time>
-                            {/* <ol class="mt-2">
-                                <li>
-                                    <a href="#" class="group flex">
-                                        <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Sam's birthday party</p>
-                                        <time datetime="2022-01-25T14:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">2PM</time>
-                                    </a>
-                                </li>
-                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-13">13</time>
@@ -234,20 +218,6 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-22">22</time>
-                            {/* <ol class="mt-2">
-                                <li>
-                                    <a href="#" class="group flex">
-                                        <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Maple syrup museum</p>
-                                        <time datetime="2022-01-22T15:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">3PM</time>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="group flex">
-                                        <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Hockey game</p>
-                                        <time datetime="2022-01-22T19:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">7PM</time>
-                                    </a>
-                                </li>
-                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-23">23</time>
@@ -287,14 +257,6 @@ function Calender() {
                         </div>
                         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
                             <time datetime="2022-02-04">4</time>
-                            {/* <ol class="mt-2">
-                                <li>
-                                    <a href="#" class="group flex">
-                                        <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Cinema with friends</p>
-                                        <time datetime="2022-02-04T21:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">9PM</time>
-                                    </a>
-                                </li>
-                            </ol> */}
                         </div>
                         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
                             <time datetime="2022-02-05">5</time>
