@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AppContext } from "../context/Context";
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+
 
 function Calender() {
     const [formattedDate, setFormattedDate] = useState("");
@@ -11,6 +13,8 @@ function Calender() {
         setFormattedDate(formattedDate);
     }, [options]);
 
+
+
     return (
         <div className="lg:flex lg:h-full lg:flex-col">
             <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
@@ -18,38 +22,47 @@ function Calender() {
                     <time dateTime="2022-01">{formattedDate}</time>
                 </h1>
                 <div class="flex items-center">
-                    <div class="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
-                        <button type="button" class="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50">
-                            <span class="sr-only">Previous month</span>
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        <button type="button" class="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block">Today</button>
-                        <span class="relative -mx-px h-5 w-px bg-gray-300 md:hidden"></span>
-                        <button type="button" class="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50">
-                            <span class="sr-only">Next month</span>
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
                     <div class="hidden md:ml-4 md:flex md:items-center">
                         <div class="relative">
-                            <button type="button" class="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
-                                Month view
-                                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <div class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                                <div class="py-1" role="none">
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Day view</a>
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Week view</a>
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Month view</a>
-                                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Year view</a>
+                            <Menu as="div" className="relative ml-3">
+                                <div>
+                                    <MenuButton >
+                                        <div class="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+                                            <button type="button" class="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50">
+                                                <span class="sr-only">Previous month</span>
+                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            <button type="button" class="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block">Today</button>
+                                            <span class="relative -mx-px h-5 w-px bg-gray-300 md:hidden"></span>
+                                            <button type="button" class="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50">
+                                                <span class="sr-only">Next month</span>
+                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </MenuButton>
                                 </div>
-                            </div>
+                                <MenuItems
+                                    transition
+                                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                                >
+                                    <MenuItem>
+                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Day view</a>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Week view</a>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Month view</a>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Year view</a>
+                                    </MenuItem>
+                                </MenuItems>
+                            </Menu>
                         </div>
                         <div class="ml-6 h-6 w-px bg-gray-300"></div>
                         <button type="button" class="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Add event</button>
@@ -160,14 +173,14 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-07">7</time>
-                            <ol class="mt-2">
+                            {/* <ol class="mt-2">
                                 <li>
                                     <a href="#" class="group flex">
                                         <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Date night</p>
                                         <time datetime="2022-01-08T18:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">6PM</time>
                                     </a>
                                 </li>
-                            </ol>
+                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-08">8</time>
@@ -183,14 +196,14 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-12" class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">12</time>
-                            <ol class="mt-2">
+                            {/* <ol class="mt-2">
                                 <li>
                                     <a href="#" class="group flex">
                                         <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Sam's birthday party</p>
                                         <time datetime="2022-01-25T14:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">2PM</time>
                                     </a>
                                 </li>
-                            </ol>
+                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-13">13</time>
@@ -221,7 +234,7 @@ function Calender() {
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-22">22</time>
-                            <ol class="mt-2">
+                            {/* <ol class="mt-2">
                                 <li>
                                     <a href="#" class="group flex">
                                         <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Maple syrup museum</p>
@@ -234,7 +247,7 @@ function Calender() {
                                         <time datetime="2022-01-22T19:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">7PM</time>
                                     </a>
                                 </li>
-                            </ol>
+                            </ol> */}
                         </div>
                         <div class="relative bg-white px-3 py-2">
                             <time datetime="2022-01-23">23</time>
@@ -274,14 +287,14 @@ function Calender() {
                         </div>
                         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
                             <time datetime="2022-02-04">4</time>
-                            <ol class="mt-2">
+                            {/* <ol class="mt-2">
                                 <li>
                                     <a href="#" class="group flex">
                                         <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Cinema with friends</p>
                                         <time datetime="2022-02-04T21:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">9PM</time>
                                     </a>
                                 </li>
-                            </ol>
+                            </ol> */}
                         </div>
                         <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
                             <time datetime="2022-02-05">5</time>
