@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Monthly from "./pages/Monthly";
+import Daily from "./pages/Daily";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,6 +22,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
           <Route path='/monthly' element={<Monthly />} />
+          <Route path='/daily' element={<Daily />} />
         </Routes>
         <Footer />
       </AppContext.Provider>

@@ -7,13 +7,14 @@ function Calender() {
     const [formattedDate, setFormattedDate] = useState("");
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
+
+
     useEffect(() => {
         const date = new Date();
         const formattedDate = date.toLocaleString('en-US', options);
         setFormattedDate(formattedDate);
+        // setHabits([ { habitName: "Workout", habitOccurances: []}, ])
     }, [options]);
-
-
 
     return (
         <div className="lg:flex lg:h-full lg:flex-col">
