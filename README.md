@@ -6,8 +6,9 @@ Diem is a habit tracking application with a Python backend that helps users crea
 
 - User profile creation
 - Add or remove habits
-- Choose the frequency of the habit
+- Choose the color for anf frequency of the habit
 - Mark the habit as completed, which timestamps the completion and records it for tracking progress
+- View habits in three ways: daily, weekly, monthly
 
 ### Built With
 
