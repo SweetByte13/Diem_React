@@ -31,7 +31,7 @@ export default function NavBar() {
                             <img
                                 alt="Your Company"
                                 src="./favicon.ico"
-                                className="h-8 w-auto rounded-full"
+                                className="h-12 w-auto rounded-full"
                             />
                         </div>
                         <div className="hidden sm:ml-6 sm:block">
