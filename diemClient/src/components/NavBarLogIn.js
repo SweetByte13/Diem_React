@@ -33,7 +33,7 @@ export default function NavBarLogIn() {
                             <img
                                 alt="Your Company"
                                 src="./favicon.ico"
-                                className="h-8 w-auto rounded-full"
+                                className="h-12 w-auto rounded-full"
                             />
                         </div>
                     </div>
