@@ -104,15 +104,15 @@ const Calendar = () => {
     };
 
     return (
-        <div className="border border-gray-300 p-4">
-            {renderHeader()}
-            <div className="grid grid-cols-7 gap-2">
-            </div>
-            {renderDays()}
-            <div>
+        <div className="bg-indigo-950 min-h-screen flex items-center justify-center p-4 pt-16 pb-20">
+            <div className="bg-white border border-gray-300 p-4 w-full max-w-screen-lg">
+                {renderHeader()}
+                <button className="border rounded py-1 px-3 mt-4 mb-12 bg-indigo-900 text-white" onClick={handleAddEvent}>Add Event</button>
+                <div className="grid grid-cols-7 gap-2">
+                </div>
+                {renderDays()}
                 {renderCells()}
             </div>
-            <button className="border rounded py-1 px-3 mt-4" onClick={handleAddEvent}>Add Event</button>
         </div>
     );
 };
