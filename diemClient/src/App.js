@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Monthly from "./pages/Monthly";
+import Weekly from "./pages/Weekly";
 import Daily from "./pages/Daily";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
           <Route path='/monthly' element={<Monthly />} />
+          <Route path='/weekly' element={<Weekly />} />
           <Route path='/daily' element={<Daily />} />
         </Routes>
         <Footer />
