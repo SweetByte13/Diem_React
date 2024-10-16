@@ -77,7 +77,8 @@ const Calendar = () => {
         return events
             .filter(event => isSameDay(parse(event.date, 'yyyy-MM-dd', new Date()), day))
             .map((event, index) => (
-                <div key={index} className={`mt-1 text-sm p-1 rounded ${event.color}`}>
+                <div key={index} className={`mt-1 text-sm p-1 rounded ${event.color}`} //onClick={(e) => handleEventClick}
+                >
                     {event.title}
                 </div>
             ));
@@ -86,6 +87,16 @@ const Calendar = () => {
     const handleDateClick = (day) => {
         setSelectedDate(day);
     };
+
+    // WORKING ON THIS. WANT TO BE ABLE TO CLICK ON THE EVENT AND EDIT IT. SHOULD IT BE A FORM?
+    // const handleEventClick = (e) => {
+    //     const target = e.target.value
+    //     const title = prompt("Enter event title:");
+    //     const color = prompt("Enter event color class (e.g., bg-red-500):");
+    //     if (title && color) {
+    //         setEvents([...events, { date: format(selectedDate, 'yyyy-MM-dd'), title, color }]);
+    //     }
+    // }
 
     const handleAddEvent = () => {
         const title = prompt("Enter event title:");
