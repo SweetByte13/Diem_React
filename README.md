@@ -4,11 +4,12 @@ Diem is a habit tracking application with a Python backend that helps users crea
 
 ## Features
 
-- User profile creation
-- Add or remove habits
-- Choose the color for and frequency of the habit
-- Mark the habit as completed, which timestamps the completion and records it for tracking progress
-- View habits in three ways: daily, weekly, monthly
+- User Profile Creation: Create and manage your user profile.
+- Add or Remove Habits: Flexibly add new habits or remove existing ones.
+- Custom Habit Attributes: Choose the color for and frequency of each habit.
+- Habit Completion: Mark habits as completed, which timestamps the completion and records it for tracking progress.
+- Flexible Views: View habits in daily, weekly, or monthly layouts for better visualization.
+- Habit Streaks: Track the streak for each habit as it grows.
 
 ### Built With
 
@@ -16,7 +17,7 @@ Diem is a habit tracking application with a Python backend that helps users crea
 * React
 * CSS
 * HTML
-* React-Bootstrap
+* TailwindCSS
 
 ## System Requirements
 
@@ -42,12 +43,12 @@ npm install
 
 ## Testing
 
-test are located in the tests directory
-files must begin with 'test_'
-function must begin with 'test_'
-classes must begin with 'Test'
+Test are located in the tests directory:
+- files must begin with 'test_'
+- function must begin with 'test_'
+- classes must begin with 'Test'
 
-to run use:
+to run tests, use:
 ```
 npm test
 ```
@@ -60,3 +61,9 @@ npm start
 ```
 * This command runs the app in the development mode.\
 * Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+## Deployment
+To be added...
+
+### Acknowledgements
+Developers: Zachary Berman and Tova Hillman
