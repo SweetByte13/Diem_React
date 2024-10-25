@@ -35,22 +35,22 @@ const WeeklyCalendar = () => {
 
   return (
     <div className='bg-[#301934]'>
-      <div className='container flex items-center justify-between'>
-        <div className="flex-grow text-center pl-64 underline decoration-2">
-          <header className="text-3xl pt-16 text-white">
+      <div className='container flex items-center justify-between mx-auto my-auto'>
+        <div className="flex-grow text-center pl-64 underline decoration-2 decoration-white">
+          <header className="text-3xl pt-16 text-gray-100">
             Weekly Calendar View
           </header>
         </div>
         <div className="pt-16 pr-40">
           <button
-            className="border rounded p-8 py-2 px-3 mb-2 text-[#301934] hover:text-white hover:bg-[#5F4563] bg-gray-100 text-md"
+            className="border rounded p-8 py-2 px-3 mb-2 font-medium text-[#301934] hover:text-white hover:bg-[#5F4563] bg-gray-100 text-md text"
             onClick={addHabit}
           >
             Add Habit
           </button>
         </div>
       </div>
-      <div className="container p-16 flex justify-center">
+      <div className="container p-16 flex justify-center mx-auto my-auto">
         <div className="w-full overflow-x-auto bg-grey-300">
           <table className="table-auto w-full border-collapse bg-gray-100">
             <thead>
