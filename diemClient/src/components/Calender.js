@@ -10,10 +10,10 @@ const Calendar = () => {
         const dateFormat = "MMMM yyyy";
         return (
             <div className="flex justify-between items-center my-2">
-                <div className="text-lg font-bold">{format(currentMonth, dateFormat)}</div>
+                <div className="text-3xl font-bold">{format(currentMonth, dateFormat)}</div>
                 <div>
-                    <button className="border rounded py-1 px-3 mx-1" onClick={prevMonth}>Prev</button>
-                    <button className="border rounded py-1 px-3 mx-1" onClick={nextMonth}>Next</button>
+                    <button className="border rounded py-1 px-3 mx-1 bg-[#301934] text-white" onClick={prevMonth}>Prev</button>
+                    <button className="border rounded py-1 px-3 mx-1 bg-[#301934] text-white" onClick={nextMonth}>Next</button>
                 </div>
             </div>
         );
@@ -53,7 +53,7 @@ const Calendar = () => {
                 days.push(
                     <div
                         key={day}
-                        className={`border p-2 h-32 lg:h-48 flex flex-col ${isSameDay(day, selectedDate) ? "bg-blue-200" : ""}`}
+                        className={`border p-2 h-32 lg:h-48 flex flex-col ${isSameDay(day, selectedDate) ? "bg-[rgb(184,155,189)]" : ""}`}
                         onClick={() => handleDateClick(cloneDay)}
                     >
                         <span>{formattedDate}</span>
@@ -115,10 +115,10 @@ const Calendar = () => {
     };
 
     return (
-        <div className="bg-indigo-950 min-h-screen flex items-center justify-center p-4 pt-16 pb-20">
+        <div className="bg-[#301934] min-h-screen flex items-center justify-center p-4 pt-16 pb-20">
             <div className="bg-white border border-gray-300 p-4 w-full max-w-screen-lg">
                 {renderHeader()}
-                <button className="border rounded py-1 px-3 mt-4 mb-12 bg-indigo-900 text-white" onClick={handleAddEvent}>Add Event</button>
+                <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Event</button>
                 <div className="grid grid-cols-7 gap-2">
                 </div>
                 {renderDays()}
