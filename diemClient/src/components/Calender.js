@@ -6,6 +6,7 @@ const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
+  const [currentEvent, setCurrentEvent] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const renderHeader = () => {
@@ -71,18 +72,31 @@ const Calendar = () => {
     return <div>{rows}</div>;
   };
 
+
+  //This way, the event.color value is injected into the class string, 
+  //allowing you to apply different color classes based on the event's color property. 
+  //For example, if event.color is bg-red-500, the div will have the class bg-red-500.
+  // WE NEED TO RECONFIGURE THE DTAABASE TO HOLD THE EVENT COLOR AS text-COLOR#, 
+  //so that the className can read it as the text being that color.
+  //OTHERWISE, WE CAN DO IT FOR bg-EVENT#.
+
   const renderEvents = (day) => {
     return events
       .filter(event => isSameDay(parse(event.date, 'yyyy-MM-dd', new Date()), day))
       .map((event, index) => (
-        <div key={index} className={`mt-1 text-sm p-1 rounded ${event.color}`} >
+        <div key={index} className={`mt-1 text-sm p-1 rounded ${event.color}`} onClick={handleEventClick}>
           {event.title}
         </div>
       ));
   };
 
-  const handleDateClick = (day) => {
+  const handleEventClick = (event) => {
+    setIsModalOpen(true);
+  }
+
+  const handleDateClick = (day, event) => {
     setSelectedDate(day);
+    setCurrentEvent(event);
   };
 
   const handleAddEvent = () => {
