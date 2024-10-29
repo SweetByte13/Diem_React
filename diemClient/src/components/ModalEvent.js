@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameDay, parse } from 'date-fns';
 
 
-const Modal = ({ closeModal, handleSubmit, currentEvent, handleDelete }) => {
+const ModalEvent = ({ closeModal, handleSubmit, currentEvent, handleDelete }) => {
     const [title, setTitle] = useState(currentEvent ? currentEvent.title : '');
     const [color, setColor] = useState(currentEvent ? currentEvent.color : '');
   
@@ -45,4 +45,4 @@ const Modal = ({ closeModal, handleSubmit, currentEvent, handleDelete }) => {
       </div>
     );
   };
-export default Modal;  
+export default ModalEvent;  
