@@ -13,7 +13,7 @@ function Footer() {
                     </a>
                     <ul className="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-6 mb-6 border-b border-gray-300">
                         <li><a  className="text-gray-800 hover:text-gray-900">Home</a></li>
-                        {user === null || user === undefined ? <li><a className=" text-gray-800 hover:text-gray-900">Sign Up</a></li> : ""}
+                        {user === null || user === undefined ? <li><a className=" text-gray-800 hover:text-gray-900" href="/signup">Sign Up</a></li> : ""}
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Habits</a></li>}
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Calender</a></li>}
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Account</a></li>}

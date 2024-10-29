@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Modal from './Modal';
+import ModalEvent from './ModalEvent';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameDay, parse } from 'date-fns';
 
 const Calendar = () => {
@@ -84,7 +84,7 @@ const Calendar = () => {
     return events
       .filter(event => isSameDay(parse(event.date, 'yyyy-MM-dd', new Date()), day))
       .map((event, index) => (
-        <div key={index} className={`mt-1 text-sm p-1 rounded ${event.color}`} onClick={handleEventClick}>
+        <div key={index} style={{backgroundColor: `${event.color}`}} className={"mt-1 text-sm p-1 rounded"} onClick={handleEventClick}>
           {event.title}
         </div>
       ));
@@ -124,7 +124,7 @@ const Calendar = () => {
       <div className="bg-white border border-gray-300 p-4 w-full max-w-screen-lg">
         {renderHeader()}
         <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Event</button>
-        {isModalOpen && <Modal closeModal={closeModal} handleSubmit={handleSubmit} />}
+        {isModalOpen && <ModalEvent closeModal={closeModal} handleSubmit={handleSubmit} />}
         <div className="grid grid-cols-7 gap-2">
         </div>
         {renderDays()}
