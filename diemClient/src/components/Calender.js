@@ -80,6 +80,19 @@ const Calendar = () => {
   //so that the className can read it as the text being that color.
   //OTHERWISE, WE CAN DO IT FOR bg-EVENT#.
 
+  // function Demo() {
+  //   const [hex, setHex] = useState("#fff");
+  //   return (
+  //     <Sketch
+  //       style={{ marginLeft: 20 }}
+  //       color={hex}
+  //       onChange={(color) => {
+  //         setHex(color.hex);
+  //       }}
+  //     />
+  //   );
+  // }
+  
   const renderEvents = (day) => {
     return events
       .filter(event => isSameDay(parse(event.date, 'yyyy-MM-dd', new Date()), day))
