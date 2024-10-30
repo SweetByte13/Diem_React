@@ -12,6 +12,11 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
     closeModal();
   };
 
+  const handleColorChange = (color) => {
+    setColor(color.hex)
+    setHex(color.hex)
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="modal-content bg-white p-8 rounded shadow-md w-full max-w-sm md:max-w-md lg:max-w-lg">
@@ -27,7 +32,10 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
             onChange={(e) => setTitle(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          <Block className="mr-auto ml-auto" color={hex} onChange={(color) => { setHex(color.hex); }} /> <button type="submit" className="border rounded w-full mt-5 px-4 py-2 bg-[#301934] text-white">Submit</button> </form>
+          <Block className="mr-auto ml-auto" color={hex} onChange={handleColorChange} />
+          <button type="submit" className="border rounded w-full mt-5 px-4 py-2 bg-[#301934] text-white">Submit
+          </button>
+        </form>
         {currentHabit && (
           <button onClick={() => handleDelete(currentHabit.id)} className="border rounded px-4 py-2 bg-red-500 text-white mt-4">
             Delete
