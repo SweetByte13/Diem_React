@@ -28,7 +28,7 @@ function Footer() {
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Habits</a></li>}
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Calender</a></li>}
                         {user === null || user === undefined ? "" : <li><a className=" text-gray-800 hover:text-gray-900">Account</a></li>}
-                        <li><a className=" text-gray-800 hover:text-gray-900" onClick={openModal}>Support</a></li>
+                        <li><a className=" text-gray-800 hover:text-gray-900 hover:cursor-pointer" onClick={openModal}>Support</a></li>
                     </ul>
                     {isModalOpen && <ModalSupport closeModal={closeModal} />}
                     <span className="text-lg text-gray-500 text-center block">© Diem 2024, All rights reserved.</span>
