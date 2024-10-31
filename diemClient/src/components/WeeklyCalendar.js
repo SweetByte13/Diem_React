@@ -30,9 +30,24 @@ const WeeklyCalendar = () => {
     }));
   };
 
+  const handleEditHabit = (habit) => {
+    setCurrentHabit(habit);
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = (newHabit) => {
     if (newHabit) {
-      setHabits((prevHabits) => [...prevHabits, { title: newHabit.title, color: newHabit.color }]);
+      if (currentHabit) {
+        // Edit existing habit
+        setHabits((prevHabits) =>
+          prevHabits.map((habit) =>
+            habit.title === currentHabit.title ? newHabit : habit
+          )
+        );
+      } else {
+        // Add new habit
+        setHabits((prevHabits) => [...prevHabits, { title: newHabit.title, color: newHabit.color }]);
+      }
       closeModal();
     }
   };
@@ -46,6 +61,11 @@ const WeeklyCalendar = () => {
     setIsModalOpen(false);
   };
 
+  const handleDelete = (title) => {
+    setHabits((prevHabits) => prevHabits.filter(habit => habit.title !== title));
+    closeModal();
+  };
+
   return (
     <div className='bg-[#301934]'>
       <div className='container flex items-center justify-between mx-auto my-auto'>
@@ -55,7 +75,7 @@ const WeeklyCalendar = () => {
           </header>
         </div>
         <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Habit</button>
-        {isModalOpen && <ModalHabit closeModal={closeModal} handleSubmit={handleSubmit} currentHabit={currentHabit} />}
+        {isModalOpen && <ModalHabit closeModal={closeModal} handleSubmit={handleSubmit} currentHabit={currentHabit} handleDelete={handleDelete} />}
         <div className="grid grid-cols-7 gap-2">
         </div>
       </div>
@@ -72,8 +92,10 @@ const WeeklyCalendar = () => {
             </thead>
             <tbody>
               {habits.map((habit) => (
-                <tr key={habit.title || habit}>
-                  <td className="border border-black p-2 text-black font-medium w-48">{habit.title || habit}</td>
+                <tr key={habit.title}>
+                  <td className="border border-black p-2 text-black font-medium w-48 cursor-pointer" onClick={() => handleEditHabit(habit)}>
+                    {habit.title}
+                  </td>
                   {days.map((day) => (
                     <td
                       key={day}
@@ -92,7 +114,6 @@ const WeeklyCalendar = () => {
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
       </div>
