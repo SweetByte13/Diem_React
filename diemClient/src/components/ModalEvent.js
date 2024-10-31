@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Circle, Block } from '@uiw/react-color';
 
 const ModalEvent = ({ closeModal, handleSubmit, currentEvent, handleDelete }) => {
-  const [title, setTitle] = useState(currentEvent ? currentEvent.title : '');
-  const [color, setColor] = useState(currentEvent ? currentEvent.color : '');
-  const [hex, setHex] = useState(currentEvent ? currentEvent.color : '');
+  const [title, setTitle] = useState('');
+  const [color, setColor] = useState('#fff');
+
+  useEffect(() => {
+    if (currentEvent) {
+      setTitle(currentEvent.title);
+      setColor(currentEvent.color);
+    }
+  }, [currentEvent]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -13,15 +19,14 @@ const ModalEvent = ({ closeModal, handleSubmit, currentEvent, handleDelete }) =>
   };
 
   const handleColorChange = (color) => {
-    setColor(color.hex)
-    setHex(color.hex)
-  }
+    setColor(color.hex);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="modal-content bg-white p-8 rounded shadow-md w-full max-w-sm md:max-w-md lg:max-w-lg">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl mb-4">Add New Event</h2>
+          <h2 className="text-2xl mb-4">{currentEvent ? 'Edit Event' : 'Add New Event'}</h2>
           <button onClick={closeModal} className="border rounded px-1 py-1 bg-[#301934] text-white mt-4 mb-4">X</button>
         </div>
         <form onSubmit={onSubmit}>
@@ -34,7 +39,7 @@ const ModalEvent = ({ closeModal, handleSubmit, currentEvent, handleDelete }) =>
           />
           <Block
             className="mr-auto ml-auto"
-            color={hex}
+            color={color}
             onChange={handleColorChange}
           />
           <button type="submit" className="border rounded w-full mt-5 px-4 py-2 bg-[#301934] text-white">Submit</button>

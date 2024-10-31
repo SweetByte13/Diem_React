@@ -6,7 +6,7 @@ const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
-  const [currentEvent, setCurrentEvent] = useState(false)
+  const [currentEvent, setCurrentEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const renderHeader = () => {
@@ -72,52 +72,43 @@ const Calendar = () => {
     return <div>{rows}</div>;
   };
 
+  const handleEventClick = (event) => {
+    setCurrentEvent(event);
+    setIsModalOpen(true);
+  };
 
-  //This way, the event.color value is injected into the class string, 
-  //allowing you to apply different color classes based on the event's color property. 
-  //For example, if event.color is bg-red-500, the div will have the class bg-red-500.
-  // WE NEED TO RECONFIGURE THE DTAABASE TO HOLD THE EVENT COLOR AS text-COLOR#, 
-  //so that the className can read it as the text being that color.
-  //OTHERWISE, WE CAN DO IT FOR bg-EVENT#.
-
-  // function Demo() {
-  //   const [hex, setHex] = useState("#fff");
-  //   return (
-  //     <Sketch
-  //       style={{ marginLeft: 20 }}
-  //       color={hex}
-  //       onChange={(color) => {
-  //         setHex(color.hex);
-  //       }}
-  //     />
-  //   );
-  // }
-  
   const renderEvents = (day) => {
     return events
       .filter(event => isSameDay(parse(event.date, 'yyyy-MM-dd', new Date()), day))
       .map((event, index) => (
-        <div key={index} style={{backgroundColor: `${event.color}`}} className={"mt-1 text-sm p-1 rounded"} onClick={handleEventClick}>
+        <div
+          key={index}
+          style={{ backgroundColor: `${event.color}` }}
+          className="mt-1 text-sm p-1 rounded cursor-pointer"
+          onClick={() => handleEventClick(event)}
+        >
           {event.title}
         </div>
       ));
   };
 
-  const handleEventClick = (event) => {
-    setIsModalOpen(true);
-  }
-
-  const handleDateClick = (day, event) => {
+  const handleDateClick = (day) => {
     setSelectedDate(day);
-    setCurrentEvent(event);
   };
 
   const handleAddEvent = () => {
     setIsModalOpen(true);
+    setCurrentEvent(null);
   };
 
-  const handleSubmit = (event) => {
-    setEvents([...events, { date: format(selectedDate, 'yyyy-MM-dd'), ...event }]);
+  const handleSubmit = (newEvent) => {
+    if (currentEvent) {
+      setEvents(events.map(event => (event.id === currentEvent.id ? { ...currentEvent, ...newEvent } : event)));
+    } else {
+      newEvent.id = new Date().getTime();
+      setEvents([...events, { date: format(selectedDate, 'yyyy-MM-dd'), ...newEvent }]);
+    }
+    closeModal();
   };
 
   const closeModal = () => {
@@ -131,13 +122,18 @@ const Calendar = () => {
   const nextMonth = () => {
     setCurrentMonth(addDays(currentMonth, 30));
   };
-
+  
+  const handleDelete = (id) => {
+    setEvents(events.filter(event => event.id !== id));
+    closeModal();
+  };
+  
   return (
     <div className="bg-[#301934] min-h-screen flex items-center justify-center p-4 pt-16 pb-20">
       <div className="bg-white border border-gray-300 p-4 w-full max-w-screen-lg">
         {renderHeader()}
         <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Event</button>
-        {isModalOpen && <ModalEvent closeModal={closeModal} handleSubmit={handleSubmit} />}
+        {isModalOpen && <ModalEvent closeModal={closeModal} handleSubmit={handleSubmit} currentEvent={currentEvent} handleDelete={handleDelete} />}
         <div className="grid grid-cols-7 gap-2">
         </div>
         {renderDays()}
