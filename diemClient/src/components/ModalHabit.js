@@ -37,7 +37,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
           </button>
         </form>
         {currentHabit && (
-          <button onClick={() => handleDelete(currentHabit.id)} className="border rounded px-4 py-2 bg-red-500 text-white mt-4">
+          <button onClick={() => handleDelete(currentHabit.id)} className="border rounded w-full mt-5 px-4 py-2 bg-red-500 text-white mt-4">
             Delete
           </button>
         )}
