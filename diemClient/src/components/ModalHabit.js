@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Circle, Block } from '@uiw/react-color';
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -9,11 +9,21 @@ const habitTrackingTypes = [
 ];
 
 const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) => {
-  const [title, setTitle] = useState(currentHabit ? currentHabit.title : '');
-  const [color, setColor] = useState(currentHabit ? currentHabit.color : '');
-  const [recurrencePattern, setRecurrencePattern] = useState(currentHabit ? currentHabit.recurrencePattern.split(',') : []);
-  const [isInactive, setIsInactive] = useState(currentHabit ? currentHabit.isInactive : false);
-  const [habitTrackingTypeId, setHabitTrackingTypeId] = useState(currentHabit ? currentHabit.habitTrackingTypeId : '');
+  const [title, setTitle] = useState('');
+  const [color, setColor] = useState('');
+  const [recurrencePattern, setRecurrencePattern] = useState([]);
+  const [isInactive, setIsInactive] = useState(false);
+  const [habitTrackingTypeId, setHabitTrackingTypeId] = useState('');
+
+  useEffect(() => {
+    if (currentHabit) {
+      setTitle(currentHabit.title);
+      setColor(currentHabit.color);
+      setRecurrencePattern(currentHabit.recurrence_pattern.split(','));
+      setIsInactive(currentHabit.is_inactive);
+      setHabitTrackingTypeId(currentHabit.habit_tracking_type_id);
+    }
+  }, [currentHabit]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -22,7 +32,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
       color,
       habit_tracking_type_id: habitTrackingTypeId,
       recurrence_pattern: recurrencePattern.join(','),
-      created_dt: new Date().toISOString(),
+      created_dt: currentHabit ? currentHabit.created_dt : new Date().toISOString(),
       is_inactive: isInactive
     });
     closeModal();
@@ -33,7 +43,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
   };
 
   const handleCheckboxChange = (day) => {
-    setRecurrencePattern((prevPattern) => 
+    setRecurrencePattern((prevPattern) =>
       prevPattern.includes(day)
         ? prevPattern.filter((d) => d !== day)
         : [...prevPattern, day]
@@ -56,8 +66,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
             className="border p-2 mb-4 w-full"
           />
           <Block className="mr-auto ml-auto" color={color} onChange={handleColorChange} />
-          
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 pt-6">
             {daysOfWeek.map((day) => (
               <label key={day} className="flex items-center">
                 <input
@@ -70,8 +79,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
               </label>
             ))}
           </div>
-
-          <select 
+          {/* <select
             value={habitTrackingTypeId}
             onChange={(e) => setHabitTrackingTypeId(e.target.value)}
             className="border p-2 mb-4 w-full"
@@ -82,9 +90,8 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
                 {type.name}
               </option>
             ))}
-          </select>
-          
-          <label className="flex items-center">
+          </select> */}
+          <label className="flex items-center justify-center mx-auto">
             <input
               type="checkbox"
               checked={isInactive}
@@ -93,7 +100,6 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
             />
             Inactive
           </label>
-          
           <button type="submit" className="border rounded w-full mt-5 px-4 py-2 bg-[#301934] text-white">Submit</button>
         </form>
         {currentHabit && (
