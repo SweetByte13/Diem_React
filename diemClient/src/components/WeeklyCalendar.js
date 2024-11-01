@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ModalHabit from './ModalHabit';
-import { format, addDays, isSameDay, parse } from 'date-fns';
+import { format, addDays, startOfWeek, endOfWeek } from 'date-fns';
 
 const initialHabits = [
   { title: 'Workout', color: '#ff6347', recurrence_pattern: 'Mon,Wed,Fri' }, // Tomato color
@@ -9,7 +9,7 @@ const initialHabits = [
   { title: 'Study Hebrew', color: '#56B4E9', recurrence_pattern: 'Mon,Wed,Fri' }, // Sky Blue color
   { title: 'Read for 30 min', color: '#E91E63', recurrence_pattern: 'Sat,Sun' }, // Deep Pink color
   { title: 'Meal Prep', color: '#4CAF50', recurrence_pattern: 'Mon,Wed,Fri' }, // Fresh Green color
-  { title: 'Coding', color: '#9C27B0', recurrence_pattern: 'Mon,Wed,Fri' }, // Royal Purple color
+  { title: 'Coding', color: '#9C27B0', recurrence_pattern: 'Mon,Wed,Fri' }, // Royal Purple color,
 ];
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -19,8 +19,13 @@ const WeeklyCalendar = () => {
   const [selectedHabits, setSelectedHabits] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentHabit, setCurrentHabit] = useState(null);
+  const [currentWeek, setCurrentWeek] = useState(new Date());
 
   useEffect(() => {
+    updateData()
+  }, [habits]);
+
+  const updateData = () => {
     const initialSelectedHabits = {};
     habits.forEach(habit => {
       const days = habit.recurrence_pattern.split(',');
@@ -34,7 +39,6 @@ const WeeklyCalendar = () => {
       });
     });
     // Ensure cells outside the habit occurrence pattern are white
-
     days.forEach(day => {
       if (!initialSelectedHabits[day]) initialSelectedHabits[day] = {};
       habits.forEach(habit => {
@@ -48,18 +52,47 @@ const WeeklyCalendar = () => {
       });
     });
     setSelectedHabits(initialSelectedHabits);
-  }, [habits]);
-
+  }
 
   const toggleHabit = (day, habit) => {
     setSelectedHabits(prev => ({
-      ...prev, [day]: {
-        ...prev[day], [habit.title]: {
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [habit.title]: {
           ...prev[day][habit.title],
           isChecked: !prev[day][habit.title].isChecked,
         },
       },
     }));
+  };
+
+  const prevWeek = () => {
+    setCurrentWeek(addDays(currentWeek, -7));
+    updateData()
+  };
+
+  const nextWeek = () => {
+    setCurrentWeek(addDays(currentWeek, 7));
+    updateData()
+  };
+
+  const renderHeader = () => {
+    const startOfWeekDate = startOfWeek(currentWeek, { weekStartsOn: 1 });
+    const endOfWeekDate = endOfWeek(currentWeek, { weekStartsOn: 1 });
+    const dateFormat = 'MMMM dd';
+    return (
+      <div className="flex flex-col items-center my-2">
+        <div className="flex justify-between items-center w-full mt-4">
+          <button className="border rounded py-1 px-3 bg-[#301934] text-white" onClick={prevWeek}>Prev</button>
+          <div className="text-lg text-white text-center mx-4">
+            {`${format(startOfWeekDate, dateFormat)} - ${format(endOfWeekDate, dateFormat)}`}
+          </div>
+          <button className="border rounded py-1 px-3 bg-[#301934] text-white" onClick={nextWeek}>Next</button>
+        </div>
+      </div>
+
+    );
   };
 
   const handleEditHabit = habit => {
@@ -80,7 +113,11 @@ const WeeklyCalendar = () => {
         // Add new habit
         setHabits(prevHabits => [
           ...prevHabits,
-          { title: newHabit.title, color: newHabit.color, recurrence_pattern: newHabit.recurrence_pattern },
+          {
+            title: newHabit.title,
+            color: newHabit.color,
+            recurrence_pattern: newHabit.recurrence_pattern,
+          },
         ]);
       }
       closeModal();
@@ -101,16 +138,27 @@ const WeeklyCalendar = () => {
     closeModal();
   };
 
+  const getDateForDay = (startDate, dayIndex) => {
+    return addDays(startDate, dayIndex);
+  };
+
+  const startOfWeekDate = startOfWeek(currentWeek, { weekStartsOn: 1 });
+
   return (
     <div className='bg-[#301934]'>
       <div className='container flex items-center justify-between mx-auto my-auto'>
-        <div className="flex-grow text-center pl-64 underline decoration-2 decoration-white">
-          <header className="text-3xl pt-16 text-gray-100">
-            Weekly Calendar View
-          </header>
+        <div className="flex-grow text-center decoration-white">
+          <div className='flex items-center justify-between w-full'>
+            <div className="flex-grow text-center">
+              <header className="text-3xl pt-16 text-gray-100 ml-28">
+                Weekly Calendar View
+              </header>
+            </div>
+            <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Habit</button>
+            {isModalOpen && <ModalHabit closeModal={closeModal} handleSubmit={handleSubmit} currentHabit={currentHabit} handleDelete={handleDelete} />}
+          </div>
+          {renderHeader()}
         </div>
-        <button className="border rounded py-1 px-3 mt-4 mb-12 bg-[#301934] text-white" onClick={handleAddEvent}>Add Habit</button>
-        {isModalOpen && <ModalHabit closeModal={closeModal} handleSubmit={handleSubmit} currentHabit={currentHabit} handleDelete={handleDelete} />}
         <div className="grid grid-cols-7 gap-2">
         </div>
       </div>
@@ -120,8 +168,8 @@ const WeeklyCalendar = () => {
             <thead>
               <tr>
                 <th className="border border-black p-2"></th>
-                {days.map(day => (
-                  <th key={day} className="border border-black p-2 text-black">{day}</th>
+                {days.map((day, index) => (
+                  <th key={day} className="border border-black p-2 text-black">{day} {format(getDateForDay(startOfWeekDate, index), 'MM/dd')}</th>
                 ))}
               </tr>
             </thead>
