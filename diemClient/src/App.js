@@ -17,7 +17,8 @@ function App() {
   return (
     <>
       <AppContext.Provider value={{ user, setUser }}>
-      {user === null || user === undefined ? <NavBarLogIn /> : <NavBar />}
+      {/* {user === null || user === undefined ? <NavBarLogIn /> : <NavBar />} */}
+      <NavBar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/signup' element={<Signup />} />
