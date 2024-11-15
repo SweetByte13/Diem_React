@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 function SignupForm() {
     const navigate = useNavigate();
-    const { user, setUser } = useContext(AppContext);
+    const { setUser } = useContext(AppContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -34,23 +34,23 @@ function SignupForm() {
             email: email
         };
 
-    //     fetch("/api/signup", {
-    //         method: 'POST',
-    //         headers: {
-    //             "Content-Type": 'application/json'
-    //         },
-    //         body: JSON.stringify(user)
-    //     }).then((resp) => {
-    //         if (resp.ok) {
-    //             return resp.json();
-    //         } else {
-    //             alert('Invalid credentials');
-    //             throw new Error('Invalid credentials');
-    //         }
-    //     }).then((user) => {
-    //         setUser(user);
-                navigate("/calendar");
-    //     }).catch((error) => console.error('Error:', error));
+        fetch("/api/signup", {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(user)
+        }).then((resp) => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                alert('Invalid credentials');
+                throw new Error('Invalid credentials');
+            }
+        }).then((user) => {
+            setUser(user);
+            navigate("/calendar");
+        }).catch((error) => console.error('Error:', error));
     }
 
     return (
