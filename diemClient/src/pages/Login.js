@@ -19,7 +19,7 @@ function Login() {
             "password": password
         }
 
-        // fetch("YOUR_API_ENDPOINT", {
+        // fetch("/api/login", {
         //     method: "POST",
         //     headers: {
         //         "Content-Type": "application/json",
