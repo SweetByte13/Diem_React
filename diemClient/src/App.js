@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect, Component } from "react";
+import NavBar from "./components/NavBar"; 
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AppContext } from "./context/Context";
-import Footer from "./components/Footer";
-import NavBarLogIn from "./components/NavBarLogIn";
-import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
-import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Monthly from "./pages/Monthly";
-import Weekly from "./pages/Weekly";
-import Daily from "./pages/Daily";
+import Signup from "./pages/Signup";
+import Calendar from "./components/Calendar"
 
 function App() {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    fetch("/check_session")
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json()
+        }
+      }).then((user) => {
+        console.log(user.id)
+        setUser(user)
+      });
+  }, []);
+
   return (
     <>
       <AppContext.Provider value={{ user, setUser }}>
-      {/* {user === null || user === undefined ? <NavBarLogIn /> : <NavBar />} */}
-      <NavBar />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/monthly' element={<Monthly />} />
-          <Route path='/weekly' element={<Weekly />} />
-          <Route path='/daily' element={<Daily />} />
-        </Routes>
-        <Footer />
+        <div>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/calendar" element={<Calendar />} />
+            {/* Add other routes as needed */}
+          </Routes>
+        </div>
       </AppContext.Provider>
     </>
   );

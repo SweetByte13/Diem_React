@@ -19,26 +19,27 @@ function Login() {
             "password": password
         }
 
-        // fetch("/api/login", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify(user),
-        // })
-        // .then((resp) => {
-        //     if (resp.ok) {
-        //         return resp.json();
-        //     } else {
-        //         alert('Invalid credentials');
-        //         throw new Error('Invalid credentials');
-        //     }
-        // })
-        // .then((user) => {
-        //     setUser(user);
-            navigate("/calendar");
-        // })
-        // .catch((error) => console.error('Error:', error));
+        fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        })
+        .then((resp) => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                alert('Invalid credentials');
+                throw new Error('Invalid credentials');
+            }
+        })
+        .then((user) => {
+            setUser(user);
+            console.log(user)
+            navigate("/");
+        })
+        .catch((error) => console.error('Error:', error));
     }
     
     return (

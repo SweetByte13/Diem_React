@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
-import * as yup from 'yup';
 
 function SignupForm() {
     const navigate = useNavigate();
@@ -11,30 +10,16 @@ function SignupForm() {
     const [email, setEmail] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const validationSchema = yup.object().shape({
-        username: yup.string().min(5, "Username must be five characters or longer.").max(30, "Username can not be more than thirty characters."),
-        email: yup.string().email("Invalid email address").min(8, "Must be a valid email address"),
-        password: yup.string().min(6, "Password must be six characters or more.").max(20, "Password can not be longer than twenty characters."),
-        confirmPassword: yup.string().oneOf([yup.ref('password')], "Password does not match"),
-    });
-
-    const initialValues = {
-        username: '',
-        password: '',
-        confirmPassword: '',
-        email: '',
-    };
-
     function handleSignupFormSubmit(e) {
         e.preventDefault();
 
         const user = {
             username: username,
-            password: password,
-            email: email
+            email: email,
+            password: password
         };
 
-        fetch("/api/signup", {
+        fetch("http://localhost:5555/signup", {
             method: 'POST',
             headers: {
                 "Content-Type": 'application/json'
