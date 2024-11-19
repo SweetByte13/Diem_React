@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ModalHabit from './ModalHabit';
 import { format, addDays, startOfWeek, endOfWeek } from 'date-fns';
+import { AppContext } from "../context/Context";
 
 const initialHabits = [
   { title: 'Workout', color: '#ff6347', recurrence_pattern: 'Mon,Wed,Fri' }, // Tomato color
@@ -20,6 +21,9 @@ const WeeklyCalendar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentHabit, setCurrentHabit] = useState(null);
   const [currentWeek, setCurrentWeek] = useState(new Date());
+
+  const useAppContext = () => useContext(AppContext);
+  const { user, setUser, id, setId } = useAppContext();
 
   useEffect(() => {
     updateData()

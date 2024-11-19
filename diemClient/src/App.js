@@ -9,6 +9,7 @@ import Calendar from "./components/Calendar";
 import Daily from "./pages/Daily";
 import Weekly from "./pages/Weekly";
 import Monthly from "./pages/Monthly";
+import Footer from "./components/Footer";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ function App() {
             <Route path="/daily" element={<Daily />} />
             {/* Add other routes as needed */}
           </Routes>
+          <Footer />
         </div>
       </AppContext.Provider>
     </>
