@@ -27,27 +27,27 @@ export default function NavBar() {
     const useAppContext = () => useContext(AppContext);
     const { user, setUser } = useAppContext();
 
-    useEffect(() => {
-        // Check if user is logged in by checking session or authentication state
-        const checkLoginStatus = async () => {
-            try {
-                const response = await fetch("http://localhost:5555/check_session", {
-                    credentials: 'include', // Include cookies in the request
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data.user);
-                } else {
-                    setUser(null);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                setUser(null);
-            }
-        };
+    // useEffect(() => {
+    //     // Check if user is logged in by checking session or authentication state
+    //     const checkLoginStatus = async () => {
+    //         try {
+    //             const response = await fetch("http://localhost:5555/check_session", {
+    //           
+    //             });
+    //             if (response.ok) {
+    //                 const data = await response.json();
+    //                 setUser(data.user);
+    //             } else {
+    //                 setUser(null);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error:', error);
+    //             setUser(null);
+    //         }
+    //     };
 
-        checkLoginStatus();
-    }, []);
+    //     checkLoginStatus();
+    // }, []);
 
     function handleLogout() {
         fetch("http://localhost:5555/logout", {
