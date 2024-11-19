@@ -1,39 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { Circle, Block } from '@uiw/react-color';
+import { Block } from '@uiw/react-color';
 
-const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const habitTrackingTypes = [
-  { id: '1', name: 'Type 1' },
-  { id: '2', name: 'Type 2' },
-  // Add more habit tracking types as needed
+const daysOfWeek = [
+  { label: 'Mon', value: 'Mo' },
+  { label: 'Tue', value: 'Tu' },
+  { label: 'Wed', value: 'We' },
+  { label: 'Thu', value: 'Th' },
+  { label: 'Fri', value: 'Fr' },
+  { label: 'Sat', value: 'Sa' },
+  { label: 'Sun', value: 'Su' }
 ];
+const habitTrackingTypes = [
+  { id: '5288ff16dde74f5baa77c0c710897d28', name: 'Check' }
+];
+const frequencies = ['Daily', 'Weekly', 'Monthly'];
 
 const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) => {
   const [title, setTitle] = useState('');
   const [color, setColor] = useState('');
   const [recurrencePattern, setRecurrencePattern] = useState([]);
+  const [frequency, setFrequency] = useState('Weekly');
   const [isInactive, setIsInactive] = useState(false);
-  const [habitTrackingTypeId, setHabitTrackingTypeId] = useState('');
+  const [habitTrackingTypeId, setHabitTrackingTypeId] = useState('5288ff16dde74f5baa77c0c710897d28');
 
   useEffect(() => {
     if (currentHabit) {
-      setTitle(currentHabit.title);
+      setTitle(currentHabit.name);
       setColor(currentHabit.color);
-      setRecurrencePattern(currentHabit.recurrence_pattern.split(','));
+      const [freq, byday] = currentHabit.recurrence_pattern.split(';');
+      setFrequency(freq.split('=')[1]);
+      setRecurrencePattern(byday.split('=')[1].split(','));
       setIsInactive(currentHabit.is_inactive);
       setHabitTrackingTypeId(currentHabit.habit_tracking_type_id);
     }
   }, [currentHabit]);
 
+  const handleFrequencyChange = (e) => {
+    const value = e.target.value;
+    setFrequency(value);
+    if (value === 'Daily') {
+      // If Daily is selected, mark all days as selected
+      setRecurrencePattern(daysOfWeek.map(day => day.value));
+    } else {
+      setRecurrencePattern([]);
+    }
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
+    let formattedRecurrencePattern = `FREQ=${frequency};`;
+    if (frequency === 'Daily') {
+      formattedRecurrencePattern += `BYDAY=${daysOfWeek.map(day => day.value).join(',')};`;
+    } else {
+      formattedRecurrencePattern += `BYDAY=${recurrencePattern.join(',')};`;
+    }
+
     handleSubmit({
-      title,
+      name: title,
       color,
       habit_tracking_type_id: habitTrackingTypeId,
-      recurrence_pattern: recurrencePattern.join(','),
+      recurrence_pattern: formattedRecurrencePattern,
       created_dt: currentHabit ? currentHabit.created_dt : new Date().toISOString(),
-      is_inactive: isInactive
+      is_inactive: isInactive,
+      habit_values: [] // Assuming habit values need to be added
     });
     closeModal();
   };
@@ -42,11 +71,11 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
     setColor(color.hex);
   };
 
-  const handleCheckboxChange = (day) => {
+  const handleCheckboxChange = (dayValue) => {
     setRecurrencePattern((prevPattern) =>
-      prevPattern.includes(day)
-        ? prevPattern.filter((d) => d !== day)
-        : [...prevPattern, day]
+      prevPattern.includes(dayValue)
+        ? prevPattern.filter((d) => d !== dayValue)
+        : [...prevPattern, dayValue]
     );
   };
 
@@ -68,18 +97,30 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
           <Block className="mr-auto ml-auto" color={color} onChange={handleColorChange} />
           <div className="flex justify-between mb-4 pt-6">
             {daysOfWeek.map((day) => (
-              <label key={day} className="flex items-center">
+              <label key={day.value} className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={recurrencePattern.includes(day)}
-                  onChange={() => handleCheckboxChange(day)}
+                  checked={recurrencePattern.includes(day.value)}
+                  onChange={() => handleCheckboxChange(day.value)}
                   className="mr-2"
                 />
-                {day}
+                {day.label}
               </label>
             ))}
           </div>
-          {/* <select
+          <select
+            value={frequency}
+            onChange={handleFrequencyChange}
+            className="border p-2 mb-4 w-full"
+          >
+            <option value="">Select Frequency</option>
+            {frequencies.map((freq) => (
+              <option key={freq} value={freq}>
+                {freq}
+              </option>
+            ))}
+          </select>
+          <select
             value={habitTrackingTypeId}
             onChange={(e) => setHabitTrackingTypeId(e.target.value)}
             className="border p-2 mb-4 w-full"
@@ -90,7 +131,7 @@ const ModalHabit = ({ closeModal, handleSubmit, currentHabit, handleDelete }) =>
                 {type.name}
               </option>
             ))}
-          </select> */}
+          </select>
           <label className="flex items-center justify-center mx-auto">
             <input
               type="checkbox"

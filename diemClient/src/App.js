@@ -5,10 +5,14 @@ import { AppContext } from "./context/Context";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Calendar from "./components/Calendar"
+import Calendar from "./components/Calendar";
+import Daily from "./pages/Daily";
+import Weekly from "./pages/Weekly";
+import Monthly from "./pages/Monthly";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [id, setId] = useState('')
 
   useEffect(() => {
     fetch("/check_session")
@@ -17,14 +21,15 @@ function App() {
           return resp.json()
         }
       }).then((user) => {
-        console.log(user.id)
+        console.log(user)
         setUser(user)
+        setId(user.user.id)
       });
   }, []);
 
   return (
     <>
-      <AppContext.Provider value={{ user, setUser }}>
+      <AppContext.Provider value={{ user, setUser, id, setId}}>
         <div>
           <NavBar />
           <Routes>
@@ -32,6 +37,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/monthly" element={<Monthly />} />
+            <Route path="/weekly" element={<Weekly />} />
+            <Route path="/daily" element={<Daily />} />
             {/* Add other routes as needed */}
           </Routes>
         </div>

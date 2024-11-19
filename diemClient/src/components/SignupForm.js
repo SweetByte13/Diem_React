@@ -34,7 +34,7 @@ function SignupForm() {
             }
         }).then((user) => {
             setUser(user);
-            navigate("/calendar");
+            navigate("/");
         }).catch((error) => console.error('Error:', error));
     }
 

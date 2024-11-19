@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/Context";
-import Calender from "../components/Calender";
-import JSCalender from "../components/Calender";
+import Calendar from "../components/Calendar";
 
 function Monthly(){
     const useAppContext = () => useContext(AppContext);
@@ -9,7 +8,7 @@ function Monthly(){
 
     return(
         <>
-        <Calender />
+        <Calendar />
         </>
     )
 }
