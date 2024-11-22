@@ -12,6 +12,7 @@ const WeeklyCalendar = () => {
   const [currentHabit, setCurrentHabit] = useState(null);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [dayOfWeek, setDayOfWeek] = useState("");
+  const [completed, setCompleted] = useState(false);
   const [date, setDate] = useState("");
   const [month, setMonth] = useState("");
 
@@ -64,34 +65,123 @@ const WeeklyCalendar = () => {
 
   const updateData = () => {
     const initialSelectedHabits = {};
+
     habits.forEach(habit => {
-        const habitDays = habit.recurrence_pattern.split(',');
-        habitDays.forEach(day => {
-            if (!initialSelectedHabits[day]) initialSelectedHabits[day] = {};
-            initialSelectedHabits[day][habit.name] = {
-                isChecked: habit.habit_occurances.some(occurrence => occurrence.is_complete),
-                isInPattern: true,
-                color: habit.color + '33', // Opaque color for days the habit occurs but is not complete
-                fullColor: habit.color // Full color for days the habit is complete
-            };
+      // Extract the recurrence pattern
+      const recurrencePattern = habit.recurrence_pattern;
+      const freqMatch = recurrencePattern.match(/FREQ=(\w+);/);
+      const byDayMatch = recurrencePattern.match(/BYDAY=([\w,]+);/);
+
+      const freq = freqMatch ? freqMatch[1] : null;
+      const days = byDayMatch ? byDayMatch[1].split(',') : [];
+
+      // Determine if the habit occurs today
+      const today = new Date().toLocaleString('en-us', { weekday: 'short' });
+
+      if (freq === 'Daily' || days.includes(today.slice(0, 2))) {
+        days.forEach(day => {
+          if (!initialSelectedHabits[day]) initialSelectedHabits[day] = {};
+          initialSelectedHabits[day][habit.name] = {
+            isChecked: habit.habit_occurances && Array.isArray(habit.habit_occurances) && habit.habit_occurances.some(occurrence => occurrence.is_complete),
+            isInPattern: true,
+            color: habit.color + '33', // Opaque color for days the habit occurs but is not complete
+            fullColor: habit.color // Full color for days the habit is complete
+          };
         });
+      }
     });
 
     // Ensure cells outside the habit occurrence pattern are white
     days.forEach(day => {
-        if (!initialSelectedHabits[day]) initialSelectedHabits[day] = {};
-        habits.forEach(habit => {
-            if (!initialSelectedHabits[day][habit.name]) {
-                initialSelectedHabits[day][habit.name] = {
-                    isChecked: false,
-                    isInPattern: false,
-                    color: '#FFFFFF', // White color for non-occurrence days
-                };
-            }
-        });
+      if (!initialSelectedHabits[day]) initialSelectedHabits[day] = {};
+      habits.forEach(habit => {
+        if (!initialSelectedHabits[day][habit.name]) {
+          initialSelectedHabits[day][habit.name] = {
+            isChecked: false,
+            isInPattern: false,
+            color: '#FFFFFF', // White color for non-occurrence days
+          };
+        }
+      });
     });
     setSelectedHabits(initialSelectedHabits);
-};
+  };
+
+
+  // Ensure habit object and habit_occurances are properly checked
+  const handleCheckBox = (habit) => {
+    if (!habit || !habit.habit_occurances || habit.habit_occurances.length === 0) {
+      console.error('Invalid habit or no habit occurrences found.');
+      return;
+    }
+
+    const isComplete = !habit.habit_occurances[0].is_complete;
+    habit.habit_occurances[0].is_complete = isComplete;
+
+    setCompleted(isComplete);
+
+    if (isComplete) {
+      markHabitComplete(habit.habit_occurances[0]);
+    } else {
+      markHabitIncomplete(habit.habit_occurances[0]);
+    }
+  };
+
+  const markHabitComplete = (habitOccurance) => {
+    if (!habitOccurance || !habitOccurance.id) {
+      console.error('Invalid habit occurrence.');
+      return;
+    }
+
+    setHabits([...habits]);
+    fetch(`http://localhost:5555/mark_habit_occurance_complete/${habitOccurance.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          throw new Error('Failed to mark habit occurrence complete');
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const markHabitIncomplete = (habitOccurance) => {
+    if (!habitOccurance || !habitOccurance.id) {
+      console.error('Invalid habit occurrence.');
+      return;
+    }
+
+    setHabits([...habits]);
+    fetch(`http://localhost:5555/mark_habit_occurance_incomplete/${habitOccurance.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          throw new Error('Failed to mark habit occurrence incomplete');
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
 
   const toggleHabit = (day, habit) => {
@@ -108,9 +198,6 @@ const WeeklyCalendar = () => {
         },
       },
     }));
-    console.log(habit)
-    console.log(habit.habit_occurances)
-    console.log(habit.habit_occurances.id)
     // Make PATCH request to backend
     const endpoint = `http://localhost:5555/mark_habit_occurance_${isChecked ? 'complete' : 'incomplete'}/${habit.habit_occurances[0].id}`;
 
@@ -122,7 +209,7 @@ const WeeklyCalendar = () => {
 
     })
       .then(response => {
-      
+
         if (response.ok) {
           return response;
         } else {
@@ -135,7 +222,7 @@ const WeeklyCalendar = () => {
       .catch(error => {
         console.error('Error:', error);
       });
-};
+  };
 
 
 
@@ -172,29 +259,71 @@ const WeeklyCalendar = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = newHabit => {
+  const handleSubmit = (newHabit) => {
     if (newHabit) {
       if (currentHabit) {
-        // Edit existing habit
-        setHabits(prevHabits =>
-          prevHabits.map(habit =>
-            habit.name === currentHabit.name ? newHabit : habit
-          )
-        );
-      } else {
-        // Add new habit
-        setHabits(prevHabits => [
-          ...prevHabits,
-          {
+        // Update existing habit
+        fetch(`http://localhost:5555/habit/${currentHabit.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
             name: newHabit.name,
             color: newHabit.color,
+            habit_tracking_type_id: newHabit.habit_tracking_type_id,
             recurrence_pattern: newHabit.recurrence_pattern,
+            user_id: id,
+            habit_values: newHabit.habit_values
+          })
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Failed to update habit');
+            }
+          })
+          .then(data => {
+            setHabits(habits.map(habit => (habit.id === currentHabit.id ? data : habit)));
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      } else {
+        // Create new habit
+        fetch('http://localhost:5555/habit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
           },
-        ]);
+          body: JSON.stringify({
+            name: newHabit.name,
+            color: newHabit.color,
+            habit_tracking_type_id: newHabit.habit_tracking_type_id,
+            recurrence_pattern: newHabit.recurrence_pattern,
+            user_id: id,
+            habit_values: newHabit.habit_values
+          })
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Failed to create new habit');
+            }
+          })
+          .then(data => {
+            setHabits([...habits, data]);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       }
       closeModal();
     }
   };
+
 
   const handleAddEvent = () => {
     setCurrentHabit(null);

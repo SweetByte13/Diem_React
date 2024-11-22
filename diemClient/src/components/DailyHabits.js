@@ -19,12 +19,12 @@ function DailyHabits() {
                 const today = new Date();
                 const startDate = today.toISOString().split('T')[0];
                 const endDate = today.toISOString().split('T')[0];
-                
+
                 // Set the day of the week and date number based on today's date
                 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 const todayDayOfWeek = days[today.getDay()];
                 const todayDate = today.getDate();
-                const todayMonth= today.getMonth()
+                const todayMonth = today.getMonth()
 
                 fetch(`http://localhost:5555/habits_by_user/${id}`, {
                     method: 'POST',
@@ -33,40 +33,46 @@ function DailyHabits() {
                     },
                     body: JSON.stringify({ startDate, endDate })
                 })
-                .then(response => {
-                    console.log(response);
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        console.error('Failed to fetch habits');
-                    }
-                })
-                .then(data => {
-                    setHabits(data);
-                    setDayOfWeek(todayDayOfWeek); // Set the day of the week here
-                    setDate(todayDate); // Set the date number here
-                    setMonth(todayMonth); //Set the month here
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                    .then(response => {
+                        console.log(response);
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            console.error('Failed to fetch habits');
+                        }
+                    })
+                    .then(data => {
+                        setHabits(data);
+                        setDayOfWeek(todayDayOfWeek); // Set the day of the week here
+                        setDate(todayDate); // Set the date number here
+                        setMonth(todayMonth); //Set the month here
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             }
         };
         fetchHabits();
     }, [user, id]);
 
-    function handleCheckBox(habit) {
-        console.log(habit);
-        setCompleted(!completed);
-        habit.habit_occurances[0].is_complete = !habit.habit_occurances[0].is_complete
-        console.log(habit.habit_occurances[0].is_complete)
-        if (habit.habit_occurances[0].is_complete === true) {
-            markHabitComplete(habit.habit_occurances[0])
+    const handleCheckBox = (habit) => {
+        // Ensure habit.habit_occurances[0] is defined before accessing its properties
+        if (!habit.habit_occurances || habit.habit_occurances.length === 0) {
+            console.error('No habit occurrences found.');
+            return;
         }
-        else {
-            markHabitIncomplete(habit.habit_occurances[0])
+
+        const isComplete = !habit.habit_occurances[0].is_complete;
+        habit.habit_occurances[0].is_complete = isComplete;
+
+        setCompleted(isComplete);
+
+        if (isComplete) {
+            markHabitComplete(habit.habit_occurances[0]);
+        } else {
+            markHabitIncomplete(habit.habit_occurances[0]);
         }
-    }
+    };
 
     const markHabitComplete = (habitOccurance) => {
         setHabits([...habits]);
@@ -76,23 +82,22 @@ function DailyHabits() {
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                throw new Error('Failed to mark habit occurrence complete');
-            }
-        })
-        .then(data => {
-            console.log(data);
-            // Handle the response or update the state as needed
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    throw new Error('Failed to mark habit occurrence complete');
+                }
+            })
+            .then(data => {
+                console.log(data);
+                // Handle the response or update the state as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     };
 
-    
     const markHabitIncomplete = (habitOccurance) => {
         setHabits([...habits]);
         fetch(`http://localhost:5555/mark_habit_occurance_incomplete/${habitOccurance.id}`, {
@@ -101,22 +106,21 @@ function DailyHabits() {
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => {
-            if (response.ok) {
-                return response;
-            } else {
-                throw new Error('Failed to mark habit occurrence incomplete');
-            }
-        })
-        .then(data => {
-            console.log(data);
-            // Handle the response or update the state as needed
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response;
+                } else {
+                    throw new Error('Failed to mark habit occurrence incomplete');
+                }
+            })
+            .then(data => {
+                console.log(data);
+                // Handle the response or update the state as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     };
-    
 
     const handleAddHabit = () => {
         setIsModalOpen(true);
@@ -140,23 +144,23 @@ function DailyHabits() {
                     color: newHabit.color,
                     habit_tracking_type_id: newHabit.habit_tracking_type_id,
                     recurrence_pattern: newHabit.recurrence_pattern,
-                    user_id: user.id, // Ensure user.id is a valid UUID string
+                    user_id: id,
                     habit_values: newHabit.habit_values
                 })
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to create new habit');
-                }
-            })
-            .then(data => {
-                setHabits([...habits, data]);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to create new habit');
+                    }
+                })
+                .then(data => {
+                    setHabits([...habits, data]);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
         closeModal();
     };
@@ -184,10 +188,10 @@ function DailyHabits() {
                                     type="checkbox"
                                     id={`myCheckbox-${index}`}
                                     value={habit.name}
-                                    checked={habit.habit_occurances[0].is_complete}
+                                    checked={habit.habit_occurances && habit.habit_occurances.length > 0 ? habit.habit_occurances[0].is_complete : false}
                                     className="w-4 h-4 rounded focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                     style={{ accentColor: habit.color }}
-                                    onClick={(e) => handleCheckBox(habit)}
+                                    onClick={() => handleCheckBox(habit)}
                                 />
                                 <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{habit.name}</label>
                             </div>
