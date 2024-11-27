@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ModalHabit from './ModalHabit';
-import { format, addDays, startOfWeek, endOfWeek } from 'date-fns';
+import { format, addDays, startOfWeek, endOfWeek, subWeeks, addWeeks } from 'date-fns';
 import { AppContext } from "../context/Context";
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -62,7 +62,6 @@ const WeeklyCalendar = () => {
     updateData()
   }, [habits]);
 
-
   const updateData = () => {
     const initialSelectedHabits = {};
 
@@ -107,87 +106,136 @@ const WeeklyCalendar = () => {
     setSelectedHabits(initialSelectedHabits);
   };
 
+  const handleCellClick = (day, habit) => {
+    const selectedHabit = selectedHabits[day][habit.name];
+    const isComplete = !selectedHabit.isChecked;
 
-  // Ensure habit object and habit_occurances are properly checked
-  const handleCheckBox = (habit) => {
-    if (!habit || !habit.habit_occurances || habit.habit_occurances.length === 0) {
-      console.error('Invalid habit or no habit occurrences found.');
-      return;
-    }
-
-    const isComplete = !habit.habit_occurances[0].is_complete;
-    habit.habit_occurances[0].is_complete = isComplete;
-
-    setCompleted(isComplete);
-
-    if (isComplete) {
-      markHabitComplete(habit.habit_occurances[0]);
+    if (!selectedHabit.isInPattern) {
+      // Workflow for habit occurrences not in the recurrence pattern
+      if (!selectedHabit.isChecked && !selectedHabit.wasCreated) {
+        // First click: Create new habit occurrence and mark complete
+        createNewHabitOccurrence(day, habit);
+      } else if (selectedHabit.isChecked) {
+        // Second click: Mark habit occurrence as incomplete (turn cell opaque)
+        markHabitIncomplete(day, habit);
+      } else if (!selectedHabit.isChecked && selectedHabit.wasCreated) {
+        // Third click: Delete habit occurrence (cell turns white)
+        deleteHabitOccurrence(day, habit);
+      }
     } else {
-      markHabitIncomplete(habit.habit_occurances[0]);
+      // For habit occurrences in the recurrence pattern, simply toggle completion
+      toggleHabitCompletion(day, habit);
     }
   };
 
-  const markHabitComplete = (habitOccurance) => {
-    if (!habitOccurance || !habitOccurance.id) {
-      console.error('Invalid habit occurrence.');
-      return;
-    }
+  const createNewHabitOccurrence = (day, habit) => {
+    // Simulating creation of a new habit occurrence
+    const newOccurrence = { id: Date.now(), is_complete: true, day: day, habit_id: habit.id };
 
-    setHabits([...habits]);
-    fetch(`http://localhost:5555/mark_habit_occurance_complete/${habitOccurance.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
+    // Update state with new habit occurrence
+    setSelectedHabits(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [habit.name]: {
+          ...prev[day][habit.name],
+          isChecked: true,
+          wasCreated: true,
+          color: habit.color
+        },
       },
+    }));
+
+    // Update backend
+    fetch('http://localhost:5555/create_habit_occurrence', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newOccurrence),
     })
       .then(response => {
         if (response.ok) {
-          return response;
+          console.log('Habit occurrence created successfully');
         } else {
-          throw new Error('Failed to mark habit occurrence complete');
+          throw new Error('Failed to create habit occurrence');
         }
-      })
-      .then(data => {
-        console.log(data);
       })
       .catch(error => {
         console.error('Error:', error);
       });
   };
 
-  const markHabitIncomplete = (habitOccurance) => {
-    if (!habitOccurance || !habitOccurance.id) {
-      console.error('Invalid habit occurrence.');
-      return;
-    }
+  const markHabitIncomplete = (day, habit) => {
+    setSelectedHabits(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [habit.name]: {
+          ...prev[day][habit.name],
+          isChecked: false,
+          color: habit.color + '33', // Opaque color for incomplete
+        },
+      },
+    }));
 
-    setHabits([...habits]);
-    fetch(`http://localhost:5555/mark_habit_occurance_incomplete/${habitOccurance.id}`, {
+    // Update backend
+    const endpoint = `http://localhost:5555/mark_habit_occurance_incomplete/${habit.habit_occurances[0].id}`;
+    fetch(endpoint, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
-      },
+        'Content-Type': 'application/json',
+      }
     })
       .then(response => {
         if (response.ok) {
-          return response;
+          console.log('Habit occurrence marked as incomplete');
         } else {
-          throw new Error('Failed to mark habit occurrence incomplete');
+          throw new Error('Failed to mark habit occurrence as incomplete');
         }
-      })
-      .then(data => {
-        console.log(data);
       })
       .catch(error => {
         console.error('Error:', error);
       });
   };
 
+  const deleteHabitOccurrence = (day, habit) => {
+    setSelectedHabits(prev => ({
+      ...prev,
+      [day]: {
+        ...prev[day],
+        [habit.name]: {
+          isChecked: false,
+          wasCreated: false,
+          isInPattern: false,
+          color: '#FFFFFF', // Turn cell white
+        },
+      },
+    }));
 
-  const toggleHabit = (day, habit) => {
+    // Update backend
+    const endpoint = `http://localhost:5555/delete_habit_occurrence/${habit.habit_occurances[0].id}`;
+    fetch(endpoint, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Habit occurrence deleted successfully');
+        } else {
+          throw new Error('Failed to delete habit occurrence');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
+  const toggleHabitCompletion = (day, habit) => {
     const isChecked = !selectedHabits[day][habit.name].isChecked;
 
-    // Update local state
     setSelectedHabits(prev => ({
       ...prev,
       [day]: {
@@ -198,33 +246,26 @@ const WeeklyCalendar = () => {
         },
       },
     }));
-    // Make PATCH request to backend
-    const endpoint = `http://localhost:5555/mark_habit_occurance_${isChecked ? 'complete' : 'incomplete'}/${habit.habit_occurances[0].id}`;
 
+    // Update backend
+    const endpoint = `http://localhost:5555/mark_habit_occurance_${isChecked ? 'complete' : 'incomplete'}/${habit.habit_occurances[0].id}`;
     fetch(endpoint, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
-      },
-
+        'Content-Type': 'application/json',
+      }
     })
       .then(response => {
-
         if (response.ok) {
-          return response;
+          console.log(`Habit occurrence ${isChecked ? 'completed' : 'incompleted'} successfully`);
         } else {
           throw new Error(`Failed to mark habit occurrence ${isChecked ? 'complete' : 'incomplete'}`);
         }
-      })
-      .then(data => {
-        console.log(`Habit occurrence ${isChecked ? 'completed' : 'incompleted'} successfully`);
       })
       .catch(error => {
         console.error('Error:', error);
       });
   };
-
-
 
   const prevWeek = () => {
     setCurrentWeek(addDays(currentWeek, -7));
@@ -245,7 +286,7 @@ const WeeklyCalendar = () => {
         <div className="flex justify-between items-center w-full mt-4">
           <button className="border rounded py-1 px-3 bg-[#301934] text-white" onClick={prevWeek}>Prev</button>
           <div className="text-lg text-white text-center mx-4">
-            {`${format(startOfWeekDate, dateFormat)} - ${format(endOfWeekDate, dateFormat)}`}
+          <h3 className="mb-4 font-semibold text-gray-900 dark:text-white text-center">{dayOfWeek}, {month} / {date}</h3>
           </div>
           <button className="border rounded py-1 px-3 bg-[#301934] text-white" onClick={nextWeek}>Next</button>
         </div>
@@ -346,12 +387,12 @@ const WeeklyCalendar = () => {
   const startOfWeekDate = startOfWeek(currentWeek, { weekStartsOn: 1 });
 
   return (
-    <div className='bg-[#301934]'>
+    <div>
       <div className='container flex items-center justify-between mx-auto my-auto'>
         <div className="flex-grow text-center decoration-white">
           <div className='flex items-center justify-between w-full'>
             <div className="flex-grow text-center">
-              <header className="text-3xl pt-16 text-gray-100 ml-28">
+              <header className="text-3xl pt-16 ml-28">
                 Weekly Calendar View
               </header>
             </div>
@@ -370,7 +411,7 @@ const WeeklyCalendar = () => {
               <tr>
                 <th className="border border-black p-2"></th>
                 {days.map((day, index) => (
-                  <th key={day} className="border border-black p-2 text-black">{day} {format(getDateForDay(startOfWeekDate, index), 'MM/dd')}</th>
+                  <th key={day} className="border border-black p-2 text-black">{day} {format(addDays(startOfWeekDate, index), 'MM/dd')}</th>
                 ))}
               </tr>
             </thead>
@@ -385,7 +426,7 @@ const WeeklyCalendar = () => {
                       key={day}
                       className={`border border-black p-2 w-32 h-12 ${selectedHabits[day]?.[habit.name]?.isChecked ? 'bg-white' : ''}`}
                       style={{ backgroundColor: selectedHabits[day]?.[habit.name]?.isChecked ? habit.color : (selectedHabits[day]?.[habit.name]?.color || '#FFFFFF33') }}
-                      onClick={() => toggleHabit(day, habit)}
+                      onClick={() => handleCellClick(day, habit)}
                     >
                       {selectedHabits[day]?.[habit.name]?.isChecked ? (
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-patch-check text-white mx-auto" viewBox="0 0 16 16">
@@ -403,6 +444,6 @@ const WeeklyCalendar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default WeeklyCalendar;
