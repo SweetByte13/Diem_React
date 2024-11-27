@@ -1,34 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ModalHabit from './ModalHabit';
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameDay, parse } from 'date-fns';
+import { AppContext } from '../context/Context';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameDay } from 'date-fns';
 
-const initialHabits = [
-  { title: 'Workout', color: '#ff6347', recurrence_pattern: 'Mon,Wed,Fri' }, // Tomato color
-  { title: 'Laundry', color: '#4682b4', recurrence_pattern: 'Sat' }, // SteelBlue color
-  { title: 'Practice Guitar', color: '#F0A202', recurrence_pattern: 'Tue,Thu,Sat' }, // Vibrant Orange color
-  { title: 'Study Hebrew', color: '#56B4E9', recurrence_pattern: 'Mon,Wed,Fri' }, // Sky Blue color
-  { title: 'Read for 30 min', color: '#E91E63', recurrence_pattern: 'Sat,Sun' }, // Deep Pink color
-  { title: 'Meal Prep', color: '#4CAF50', recurrence_pattern: 'Mon,Wed,Fri' }, // Fresh Green color
-  { title: 'Coding', color: '#9C27B0', recurrence_pattern: 'Mon,Wed,Fri' },
-  {title: 'Dishes', color: '#ff6347', recurrence_pattern: 'Mon,Wed,Fri' } // Royal Purple color
-];
-
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const Calendar = () => {
+  const { user, id } = useContext(AppContext);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [habits, setHabits] = useState(initialHabits);
+  const [habits, setHabits] = useState([]);
   const [currentHabit, setCurrentHabit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const updateData = () => {
-    // This function could be used to handle any additional data preparation needed
-  };
-
   useEffect(() => {
-    updateData();
-  }, [habits]);
+    const fetchHabits = async () => {
+      try {
+        const response = await fetch(`http://localhost:5555/habits_by_user/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch habits');
+        }
+        const data = await response.json();
+        setHabits(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    fetchHabits();
+  }, [id]);
 
   const renderHeader = () => {
     const dateFormat = "MMMM yyyy";
@@ -113,7 +112,6 @@ const Calendar = () => {
       ));
   };
 
-
   const handleDateClick = (day) => {
     setSelectedDate(day);
   };
@@ -123,12 +121,47 @@ const Calendar = () => {
     setCurrentHabit(null);
   };
 
-  const handleSubmit = (newHabit) => {
+  const handleSubmit = async (newHabit) => {
     if (currentHabit) {
-      setHabits(habits.map(habit => (habit.id === currentHabit.id ? { ...currentHabit, ...newHabit } : habit)));
+      // Update existing habit
+      try {
+        const response = await fetch(`http://localhost:5555/habit/${currentHabit.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newHabit),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update habit');
+        }
+
+        const updatedHabit = await response.json();
+        setHabits(habits.map(habit => (habit.id === currentHabit.id ? updatedHabit : habit)));
+      } catch (error) {
+        console.error('Error:', error);
+      }
     } else {
-      newHabit.id = new Date().getTime();
-      setHabits([...habits, { ...newHabit }]);
+      // Create new habit
+      try {
+        const response = await fetch('http://localhost:5555/habit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newHabit),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create new habit');
+        }
+
+        const createdHabit = await response.json();
+        setHabits([...habits, createdHabit]);
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
     closeModal();
   };
@@ -145,9 +178,21 @@ const Calendar = () => {
     setCurrentMonth(addDays(currentMonth, 30));
   };
 
-  const handleDelete = (id) => {
-    setHabits(habits.filter(habit => habit.id !== id));
-    closeModal();
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5555/habit/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete habit');
+      }
+
+      setHabits(habits.filter(habit => habit.id !== id));
+      closeModal();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
